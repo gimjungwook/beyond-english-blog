@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비욘드잉글리시 블로그 생성기</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a1628;
+      color: #e5e5e5;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container { max-width: 1100px; margin: 0 auto; }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-top: 20px;
+    }
+    .header h1 { 
+      font-size: 1.8rem; 
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .header p { 
+      color: #666;
+      font-size: 0.95rem;
+    }
+    
+    .card {
+      background: #0d1f3c;
+      border: 1px solid #1e3a5f;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    
+    .card h2 {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border: 1px solid #1e3a5f;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-weight: 500;
+      background: #0d1f3c;
+      color: #fff;
+    }
+    
+    .btn:hover {
+      background: #1e3a5f;
+      border-color: #2a4a6f;
+    }
+    
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+      border-color: #2563eb;
+    }
+    .btn-primary:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+    }
+    .btn-primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 0.85rem;
+    }
+    
+    .topic-box {
+      padding: 32px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .topic-box .label { 
+      font-size: 0.8rem; 
+      color: #666; 
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .topic-box .topic { 
+      font-size: 1.3rem; 
+      font-weight: 500;
+      color: #fff; 
+      line-height: 1.5;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .stats {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #1e3a5f;
+    }
+    .stat { text-align: center; }
+    .stat .num {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .stat .label {
+      font-size: 0.75rem;
+      color: #666;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 16px;
+    }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    
+    .title-option {
+      padding: 14px 16px;
+      background: #0d1f3c;
+      border: 1px solid #1e3a5f;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .title-option:hover {
+      background: #1e3a5f;
+      border-color: #2a4a6f;
+    }
+    
+    .body-content {
+      line-height: 1.8;
+      color: #ccc;
+      max-height: 500px;
+      overflow-y: auto;
+      padding-right: 10px;
+      font-size: 0.95rem;
+    }
+    .body-content::-webkit-scrollbar { width: 6px; }
+    .body-content::-webkit-scrollbar-track { background: #0d1f3c; }
+    .body-content::-webkit-scrollbar-thumb { background: #1e3a5f; border-radius: 3px; }
+    .body-content h1 {
+      font-size: 1.25rem;
+      color: #fff;
+      margin: 28px 0 14px 0;
+      font-weight: 600;
+    }
+    .body-content h2 {
+      font-size: 1.15rem;
+      color: #fff;
+      margin: 24px 0 12px 0;
+      font-weight: 600;
+    }
+    .body-content h3 {
+      font-size: 1.1rem;
+      color: #fff;
+      margin: 20px 0 10px 0;
+      font-weight: 600;
+    }
+    .body-content p {
+      margin: 12px 0;
+    }
+    .body-content strong {
+      color: #fff;
+      font-weight: 600;
+    }
+    .body-content ul, .body-content ol {
+      margin: 12px 0;
+      padding-left: 24px;
+    }
+    .body-content li {
+      margin: 6px 0;
+    }
+    
+    .hashtags {
+      padding: 16px;
+      background: #0d1f3c;
+      border: 1px solid #1e3a5f;
+      border-radius: 8px;
+      color: #888;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .hashtags:hover { 
+      background: #1e3a5f;
+      color: #aaa;
+    }
+    
+    .image-card {
+      margin-bottom: 12px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #1e3a5f;
+      background: #0d1f3c;
+    }
+    .image-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      display: block;
+    }
+    .image-info {
+      padding: 12px;
+    }
+    .image-info .keyword { 
+      font-size: 0.8rem; 
+      color: #666;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .image-tip {
+      font-size: 0.75rem;
+      color: #555;
+      background: #061224;
+      padding: 8px 10px;
+      border-radius: 4px;
+      margin-top: 8px;
+    }
+    .credit {
+      padding: 8px 12px;
+      font-size: 0.7rem;
+      color: #555;
+      border-top: 1px solid #1e3a5f;
+    }
+    .credit a { color: #888; }
+    
+    .loading {
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 2px solid #1e3a5f;
+      border-top-color: #2563eb;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 24px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading p { 
+      font-size: 0.95rem; 
+      color: #666;
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #2563eb;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 1000;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    
+    .hidden { display: none !important; }
+    
+    .auth-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #0a1628;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .auth-box {
+      text-align: center;
+      padding: 40px;
+    }
+    .auth-box h1 {
+      font-size: 1.5rem;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .auth-box > p {
+      color: #666;
+      margin-bottom: 32px;
+    }
+    .auth-box input {
+      width: 200px;
+      padding: 14px 20px;
+      border: 1px solid #1e3a5f;
+      border-radius: 8px;
+      background: #0d1f3c;
+      color: #fff;
+      font-size: 1.2rem;
+      text-align: center;
+      letter-spacing: 8px;
+      margin-bottom: 16px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .auth-box input:focus {
+      outline: none;
+      border-color: #2563eb;
+    }
+    .auth-box input::placeholder {
+      letter-spacing: normal;
+      font-size: 0.95rem;
+    }
+    .auth-error {
+      color: #ef4444;
+      font-size: 0.85rem;
+      margin-top: 12px;
+      min-height: 20px;
+    }
+    
+    .back-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .back-row .topic-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .copy-tip {
+      background: #0d1f3c;
+      border: 1px solid #1e3a5f;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+    .copy-tip h3 {
+      font-size: 0.8rem;
+      color: #666;
+      font-weight: 500;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .copy-tip p {
+      font-size: 0.85rem;
+      color: #888;
+      line-height: 1.6;
+    }
+    .copy-tip code {
+      background: #061224;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-box">
+      <h1>비욘드잉글리쉬</h1>
+      <p>블로그 생성기</p>
+      <input type="password" id="password-input" placeholder="비밀번호" maxlength="4" autocomplete="off">
+      <button class="btn btn-primary" onclick="checkPassword()">확인</button>
+      <p id="auth-error" class="auth-error"></p>
+    </div>
+  </div>
+
+  <div class="container" id="main-container" style="display: none;">
+    <div class="header">
+      <h1>블로그 생성기</h1>
+      <p>비욘드잉글리쉬 · 결과가 다른 영어</p>
+    </div>
+
+    <!-- 메인 화면 -->
+    <div id="main-view">
+      <div class="card">
+        <div class="topic-box">
+          <div class="label">Next Topic</div>
+          <div class="topic" id="next-topic">로딩 중...</div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" id="generate-btn" onclick="generateBlog()">
+            생성하기
+          </button>
+        </div>
+        <div class="btn-group" style="margin-top: 12px;">
+          <button class="btn btn-sm" onclick="skipTopic()">건너뛰기</button>
+          <button class="btn btn-sm" onclick="resetAll()">초기화</button>
+        </div>
+        <div class="btn-group" style="margin-top: 12px;">
+          <a href="https://blog.naver.com/GoBlogWrite.naver" target="_blank" class="btn btn-sm">글쓰기</a>
+          <a href="https://blog.naver.com/jjbeyond" target="_blank" class="btn btn-sm">블로그</a>
+        </div>
+        
+        <div class="stats">
+          <div class="stat">
+            <div class="num" id="pending-count">0</div>
+            <div class="label">Remaining</div>
+          </div>
+          <div class="stat">
+            <div class="num" id="completed-count">0</div>
+            <div class="label">Completed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 로딩 화면 -->
+    <div id="loading-view" class="card hidden">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p id="loading-text">글을 작성하는 중...</p>
+      </div>
+    </div>
+
+    <!-- 결과 화면 -->
+    <div id="result-view" class="hidden">
+      <div class="back-row">
+        <button class="btn btn-sm" onclick="backToMain()">← 돌아가기</button>
+        <span class="topic-label" id="result-topic"></span>
+      </div>
+      
+      <div class="grid">
+        <div class="main-content">
+          <div class="card">
+            <h2>제목 옵션</h2>
+            <div id="titles-container"></div>
+          </div>
+          
+          <div class="card">
+            <h2>본문</h2>
+            <div class="body-content" id="body-content"></div>
+            <div class="btn-group" style="margin-top: 16px; justify-content: flex-start;">
+              <button class="btn btn-sm" onclick="copyBody()">본문 복사</button>
+              <button class="btn btn-primary btn-sm" onclick="copyAll()">전체 복사</button>
+            </div>
+          </div>
+          
+          <div class="card">
+            <h2>해시태그</h2>
+            <div class="hashtags" id="hashtags" onclick="copyHashtags()"></div>
+          </div>
+        </div>
+        
+        <div class="sidebar">
+          <div class="card">
+            <h2>이미지</h2>
+            <div id="images-container"></div>
+            
+            <div class="copy-tip">
+              <h3>이미지 복사 방법</h3>
+              <p>
+                이미지 위에서 <code>우클릭</code> → <code>이미지 복사</code> 후<br>
+                네이버 블로그 에디터에 <code>Ctrl+V</code> (Mac: <code>Cmd+V</code>)
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const GEMINI_API_KEY = localStorage.getItem('gemini_api_key') || '';
+    const UNSPLASH_ACCESS_KEY = localStorage.getItem('unsplash_api_key') || '';
+
+    const ALL_TOPICS = [
+      "우리 아이 초등 영어 시작, 언제부터가 좋을까요?",
+      "초등 저학년 영어, 흥미 잃지 않고 즐겁게 하는 법",
+      "엄마표 영어, 성공하는 비법 5가지 (영알못 엄마도 가능!)",
+      "초등 영어 학원, 언제부터 보내야 할까? 우리 아이에게 맞는 학원 선택 가이드",
+      "초등 영어 단어, 효과적으로 외우는 꿀팁 (놀이처럼!)",
+      "초등 영어 듣기 실력 향상, 매일 10분 투자로 가능해요!",
+      "초등 파닉스, 집에서 쉽고 재미있게 가르치는 방법",
+      "우리 아이 영어 말하기 자신감, 어떻게 키워줄까요?",
+      "초등 영어 그림책, 효과적으로 활용하는 팁 (단계별 추천)",
+      "초등학생 영어 앱 추천, 교육적이면서 재미있는 BEST 5",
+      "무료 영어 학습 사이트, 이것만 알아도 충분해요!",
+      "유튜브 영어 채널, 우리 아이 영어 교육에 도움 되는 곳은?",
+      "초등 영어 문법, 아이 눈높이에 맞춰 쉽게 설명하기",
+      "생활 속 영어 표현, 아이와 함께 써보세요! (초간단 루틴)",
+      "여름방학, 초등 영어 실력 업그레이드 프로젝트 (알찬 계획 세우기)",
+      "겨울방학, 초등 영어 몰입 학습, 이렇게 시작하세요!",
+      "초등 영어 숙제, 스트레스 없이 즐겁게 하는 법",
+      "초등 영어 문제집, 우리 아이에게 맞는 선택 가이드",
+      "원어민 화상 영어, 효과 제대로 보는 팁 (선생님 고르는 기준)",
+      "초등 영어 일기 쓰기, 꾸준히 하는 비법과 주제 추천",
+      "영어 동요, 아이 발음 교정에 효과적인 이유와 추천곡",
+      "해외여행 대비! 초등 아이와 함께하는 기초 영어 회화",
+      "초등 영어 캠프, 우리 아이에게 맞는 선택과 준비물",
+      "초등 영어 슬럼프, 극복하는 부모의 지혜 (다독이는 법)",
+      "AI 영어 학습, 우리 아이에게 좋을까? 장단점 분석",
+      "스크린 타임, 영어 교육에 어떻게 활용해야 할까요?",
+      "초등 저학년 영어 리딩, 독서 습관 만드는 법",
+      "초등 고학년 영어, 문해력과 독해력 동시에 잡는 비법",
+      "초등 영어 수행평가, 미리 대비하는 방법과 팁",
+      "영어 거부감 있는 아이, 다시 흥미 붙이는 법",
+      "초등 영어 홈스쿨링, 성공을 위한 부모의 역할",
+      "롤플레이로 배우는 생활 영어, 집에서 따라하기!",
+      "초등 영어 발음, 원어민처럼 교정하는 연습법",
+      "칭찬은 고래도 춤추게 한다! 영어 학습 칭찬법",
+      "초등 영어 학원 vs 과외 vs 엄마표, 우리 아이에게 맞는 교육법 찾기",
+      "초등 영어 듣기 흘려듣기 vs 집중듣기, 효과적인 방법은?",
+      "초등 영어 쓰기, 어떻게 시작해야 할까요? (쉬운 단계부터)",
+      "초등 영어 발표, 자신감 뿜뿜! 두려움 극복 팁",
+      "영어 원서 읽기, 초등 아이 수준에 맞는 책 고르는 요령",
+      "초등 졸업 전, 꼭 알아야 할 필수 영어 표현 50가지",
+      "영어 학습 동기 부여, 아이의 내적 동기를 깨우는 법",
+      "놀면서 배우는 영어! 집에서 할 수 있는 영어 게임 10가지",
+      "초등 영어 독해력, 재미있게 키우는 방법",
+      "영어를 배우면 좋은 점, 우리 아이에게 설명해 주는 법",
+      "초등 영어 교육, 부모가 먼저 아는 큰 그림과 로드맵",
+      "초등 영어 단어장, 우리 아이만의 특별한 단어장 만들기",
+      "초등 영어 발음 교정, 효과적인 섀도잉 연습법",
+      "영어 스피킹 파트너, 집에서 찾아주는 방법 (없다면?)",
+      "초등 저학년 영어 알파벳, 쉽고 빠르게 익히는 노하우",
+      "초등 영어 학습 목표 설정, 아이와 함께 세우는 법"
+    ];
+
+    let completedTopics = [];
+    let currentTopicIndex = 0;
+
+    function init() {
+      const saved = localStorage.getItem('blog_completed_topics');
+      completedTopics = saved ? JSON.parse(saved) : [];
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      const pending = ALL_TOPICS.filter(t => !completedTopics.includes(t));
+      const topicEl = document.getElementById('next-topic');
+      const btn = document.getElementById('generate-btn');
+      
+      document.getElementById('pending-count').textContent = pending.length;
+      document.getElementById('completed-count').textContent = completedTopics.length;
+      
+      if (pending.length === 0) {
+        topicEl.textContent = '모든 주제 완료';
+        btn.disabled = true;
+      } else {
+        if (currentTopicIndex >= pending.length) currentTopicIndex = 0;
+        topicEl.textContent = pending[currentTopicIndex];
+        btn.disabled = false;
+      }
+    }
+
+    function skipTopic() {
+      const pending = ALL_TOPICS.filter(t => !completedTopics.includes(t));
+      if (pending.length > 1) {
+        currentTopicIndex = (currentTopicIndex + 1) % pending.length;
+        updateDisplay();
+      }
+    }
+
+    function resetAll() {
+      if (confirm('완료 기록을 모두 삭제하시겠습니까?')) {
+        completedTopics = [];
+        localStorage.removeItem('blog_completed_topics');
+        currentTopicIndex = 0;
+        updateDisplay();
+        showToast('초기화 완료');
+      }
+    }
+
+    function markCompleted(topic) {
+      if (!completedTopics.includes(topic)) {
+        completedTopics.push(topic);
+        localStorage.setItem('blog_completed_topics', JSON.stringify(completedTopics));
+      }
+    }
+
+    async function generateBlog() {
+      const pending = ALL_TOPICS.filter(t => !completedTopics.includes(t));
+      if (pending.length === 0) return;
+      
+      const topic = pending[currentTopicIndex];
+      showView('loading');
+      
+      try {
+        document.getElementById('loading-text').textContent = '글을 작성하는 중...';
+        const content = await callGemini(topic);
+        const parsed = parseGeminiResponse(content);
+        
+        document.getElementById('loading-text').textContent = '이미지를 검색하는 중...';
+        const images = await searchImages(parsed.imageKeywords);
+        
+        markCompleted(topic);
+        renderResult(topic, parsed, images);
+        showView('result');
+        
+      } catch (error) {
+        console.error(error);
+        showToast('오류: ' + error.message);
+        showView('main');
+      }
+    }
+
+    async function callGemini(topic) {
+      const prompt = `네이버 블로그 전문 작가. 초등 자녀 둔 3040 학부모 대상 영어 교육 콘텐츠.
+
+[주제] ${topic}
+
+[제목 규칙]
+• 25~35자, 키워드 앞배치
+• 숫자/How-to/질문형/부정형 중 2개 조합
+• 감정 단어 포함: 꿀팁, 필수, 완벽, 핵심, 비법
+
+[본문 규칙]
+• 분량: 1,000~1,200자 (간결하게)
+• 말투: 친근한 "~요" 체
+• 구조: 도입(2문장) → 본론(3개 소제목) → 결론(2문장, 비욘드잉글리시 자연스럽게 언급)
+• 각 소제목: 사실/해석/경험/격려를 자연스럽게 녹여서 작성 (라벨 붙이지 말 것)
+
+[해시태그] 정확히 5개, 띄어쓰기 없이
+
+[출력 형식] - 코드블록 없이 순수 텍스트로
+## 제목 옵션
+1. 제목1
+2. 제목2
+3. 제목3
+
+## 본문
+<p>도입 내용</p>
+<h1>🎯 소제목 1</h1>
+<p>본문... <strong>강조</strong>...</p>
+<ul><li>항목1</li><li>항목2</li></ul>
+<h1>📚 소제목 2</h1>
+<p>본문...</p>
+<h1>✨ 소제목 3</h1>
+<p>본문...</p>
+<p>결론...</p>
+
+## 해시태그
+#키워드1 #키워드2 #키워드3 #키워드4 #비욘드잉글리쉬
+
+## 이미지 검색 키워드
+1. 영어키워드1
+2. 영어키워드2
+3. 영어키워드3`;
+
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error?.message || 'API 호출 실패');
+      }
+
+      const data = await response.json();
+      return data.candidates[0].content.parts[0].text;
+    }
+
+    function parseGeminiResponse(text) {
+      const result = { titles: [], body: '', hashtags: '', imageKeywords: [] };
+
+      const titleMatch = text.match(/## 제목 옵션\s*([\s\S]*?)(?=## 본문)/);
+      if (titleMatch) {
+        result.titles = titleMatch[1].trim().split('\n')
+          .map(line => line.replace(/^\d+\.\s*/, '').trim())
+          .filter(line => line.length > 0);
+      }
+
+      const bodyMatch = text.match(/## 본문\s*([\s\S]*?)(?=## 해시태그)/);
+      if (bodyMatch) {
+        // ```html 코드블록 제거
+        result.body = bodyMatch[1].trim()
+          .replace(/^```html\s*/i, '')
+          .replace(/```\s*$/, '')
+          .trim();
+      }
+
+      const hashtagMatch = text.match(/## 해시태그\s*([\s\S]*?)(?=## 이미지|$)/);
+      if (hashtagMatch) result.hashtags = hashtagMatch[1].trim();
+
+      const imageMatch = text.match(/## 이미지 검색 키워드\s*([\s\S]*?)$/);
+      if (imageMatch) {
+        result.imageKeywords = imageMatch[1].trim().split('\n')
+          .map(line => line.replace(/^\d+\.\s*/, '').trim())
+          .filter(line => line.length > 0);
+      }
+
+      return result;
+    }
+
+    async function searchImages(keywords) {
+      const images = [];
+      
+      for (const keyword of keywords.slice(0, 3)) {
+        try {
+          const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(keyword)}&per_page=1&orientation=landscape`;
+          const response = await fetch(url, {
+            headers: { 'Authorization': `Client-ID ${UNSPLASH_ACCESS_KEY}` }
+          });
+          
+          if (!response.ok) continue;
+          
+          const data = await response.json();
+          if (data.results?.length > 0) {
+            const photo = data.results[0];
+            images.push({
+              keyword,
+              url: photo.urls.regular,
+              photographer: photo.user.name,
+              photographerUrl: photo.user.links.html
+            });
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      
+      return images;
+    }
+
+    function renderResult(topic, parsed, images) {
+      document.getElementById('result-topic').textContent = topic;
+      
+      document.getElementById('titles-container').innerHTML = parsed.titles
+        .map((title, i) => `<div class="title-option" onclick="copyText('${title.replace(/'/g, "\\'")}', '제목')">${i + 1}. ${title}</div>`)
+        .join('');
+      
+      document.getElementById('body-content').innerHTML = parsed.body;
+      document.getElementById('hashtags').textContent = parsed.hashtags;
+      
+      if (images.length > 0) {
+        document.getElementById('images-container').innerHTML = images.map(img => `
+          <div class="image-card">
+            <img src="${img.url}" alt="${img.keyword}">
+            <div class="image-info">
+              <span class="keyword">${img.keyword}</span>
+            </div>
+            <div class="credit">by <a href="${img.photographerUrl}?utm_source=blog_tool" target="_blank">${img.photographer}</a></div>
+          </div>
+        `).join('');
+      } else {
+        document.getElementById('images-container').innerHTML = '<p style="color:#666;text-align:center;padding:20px;">이미지 없음</p>';
+      }
+    }
+
+    function copyText(text, label) {
+      navigator.clipboard.writeText(text).then(() => showToast(label + ' 복사됨'));
+    }
+
+    async function copyHtml(html, label) {
+      try {
+        const blob = new Blob([html], { type: 'text/html' });
+        const clipboardItem = new ClipboardItem({ 'text/html': blob });
+        await navigator.clipboard.write([clipboardItem]);
+        showToast(label + ' 복사됨 (서식 유지)');
+      } catch (err) {
+        // fallback to plain text
+        navigator.clipboard.writeText(html.replace(/<[^>]*>/g, '')).then(() => {
+          showToast(label + ' 복사됨 (텍스트만)');
+        });
+      }
+    }
+
+    function copyBody() {
+      const bodyHtml = document.getElementById('body-content').innerHTML;
+      copyHtml(bodyHtml, '본문');
+    }
+
+    function copyHashtags() {
+      copyText(document.getElementById('hashtags').textContent, '해시태그');
+    }
+
+    async function copyAll() {
+      const title = document.querySelector('.title-option')?.textContent.replace(/^\d+\.\s*/, '') || '';
+      const bodyHtml = document.getElementById('body-content').innerHTML;
+      const hashtags = document.getElementById('hashtags').textContent;
+      const fullHtml = `<h2>${title}</h2>${bodyHtml}<p>${hashtags}</p>`;
+      await copyHtml(fullHtml, '전체');
+    }
+
+    function showView(view) {
+      document.getElementById('main-view').classList.toggle('hidden', view !== 'main');
+      document.getElementById('loading-view').classList.toggle('hidden', view !== 'loading');
+      document.getElementById('result-view').classList.toggle('hidden', view !== 'result');
+    }
+
+    function backToMain() {
+      showView('main');
+      updateDisplay();
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    const AUTH_KEY = 'beyond_auth';
+    const CORRECT_PASSWORD = '3872';
+
+    function checkAuth() {
+      if (localStorage.getItem(AUTH_KEY) === 'true') {
+        showApp();
+      }
+    }
+
+    function checkPassword() {
+      const input = document.getElementById('password-input');
+      const error = document.getElementById('auth-error');
+      
+      if (input.value === CORRECT_PASSWORD) {
+        localStorage.setItem(AUTH_KEY, 'true');
+        showApp();
+      } else {
+        error.textContent = '비밀번호가 틀렸습니다';
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    function showApp() {
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('main-container').style.display = 'block';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+      init();
+      
+      document.getElementById('password-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') checkPassword();
+      });
+    });
+  </script>
+</body>
+</html>
